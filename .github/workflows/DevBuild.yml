@@ -3,7 +3,7 @@ name: Dev Build
 on:
   push:
     branches: 
-      - dev
+      - master
 
 jobs:
   build:
@@ -25,15 +25,11 @@ jobs:
       
     - name: Create distribution
       run: ./gradlew jar
-      env:
-        USERNAME: ${{ github.actor }}
-        TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Create Release
-      uses: softprops/action-gh-release@v1
+
+    - name: capture build artifacts
+      uses: actions/upload-artifact@v2
       with:
-        tag_name: dev-${{ github.sha }}
-        prerelease: true
-        name: Dev build ${{ github.sha }}
-        files: |
+        name: Artifacts
+        path: |
           build/distributions/libraries.zip
           build/distributions/*-server.jar
